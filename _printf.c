@@ -3,13 +3,13 @@
 void print_buffer(char buffer[], int *buff_ind);
 
 /**
- * my_printf - Custom printf function
- * @format: Format string
- * Return: Number of characters printed
+ * _printf - Custom printf function
+ * @format: format string.
+ * Return: Number of characters printed.
  */
-int my_printf(const char *format, ...)
+int _printf(const char *format, ...)
 {
-	int i, printed = 0, printed_chars = 0;
+	int j, printed = 0, printed_characters = 0;
 	int flags, width, precision, size, buff_ind = 0;
 	va_list list;
 	char buffer[BUFF_SIZE];
@@ -19,24 +19,25 @@ int my_printf(const char *format, ...)
 
 	va_start(list, format);
 
-	for (i = 0; format && format[i] != '\0'; i++)
+	for (j = 0; format && format[i] != '\0'; j++)
 	{
-		if (format[i] != '%')
+		if (format[j] != '%')
 		{
-			buffer[buff_ind++] = format[i];
+			buffer[buff_ind++] = format[j];
 			if (buff_ind == BUFF_SIZE)
 				print_buffer(buffer, &buff_ind);
-			printed_chars++;
+			/* write(1, &format[j], 1);*/
+			printed_characters++;
 		}
 		else
 		{
 			print_buffer(buffer, &buff_ind);
-			flags = get_flags(format, &i);
-			width = get_width(format, &i, list);
-			precision = get_precision(format, &i, list);
-			size = get_size(format, &i);
-			++i;
-			printed = handle_print(format, &i, list, buffer,
+			flags = calculate_flags(format, &j);
+			width = calculate_width(format, &j, list);
+			precision = calculate_precision(format, &j, list);
+			size = calculate_size(format, &j);
+			++j;
+			printed = handle_print(format, &j, list, buffer,
 				flags, width, precision, size);
 			if (printed == -1)
 				return (-1);
@@ -52,9 +53,9 @@ int my_printf(const char *format, ...)
 }
 
 /**
- * print_buffer - Prints the contents of the buffer if it exists
- * @buffer: Array of characters
- * @buff_ind: Index at which to add the next character, represents the length.
+ * print_buffer - Prints the contents of the buffer if it exist
+ * @buffer: Array of chars
+ * @buff_ind: Index at which to add next char, represents the length.
  */
 void print_buffer(char buffer[], int *buff_ind)
 {
